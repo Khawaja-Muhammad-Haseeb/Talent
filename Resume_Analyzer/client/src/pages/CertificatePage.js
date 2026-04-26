@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { useDeveloper } from "../context/DeveloperContext";
 import ScoreSummary from "../components/ScoreSummary";
 import CertificateCard from "../components/CertificateCard";
@@ -102,19 +104,28 @@ function CertificatePage() {
   const downloadPdf = async () => {
     if (!credential?.credentialId) return;
     try {
-      const response = await fetch(
-        `http://localhost:8003/api/stage5/download/${encodeURIComponent(credential.credentialId)}`
-      );
-      if (!response.ok) throw new Error("Download failed");
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${credential.credentialId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      const card = document.getElementById("certificate-card");
+      if (!card) throw new Error("Certificate card not found");
+
+      const canvas = await html2canvas(card, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const ratio = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+      const imgWidth = canvas.width * ratio;
+      const imgHeight = canvas.height * ratio;
+      const x = (pageWidth - imgWidth) / 2;
+      const y = 20;
+
+      pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight, undefined, "FAST");
+      pdf.save(`${credential.credentialId}.pdf`);
     } catch (err) {
       setError("Could not download the certificate PDF. Please try again.");
     }
