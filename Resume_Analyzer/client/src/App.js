@@ -1,77 +1,29 @@
-import { useState } from "react";
-import UploadZone from "./components/UploadZone";
-import LoadingState from "./components/LoadingState";
-import ScoreCard from "./components/ScoreCard";
-import AnalysisReport from "./components/AnalysisReport";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import ResumePage from "./pages/ResumePage";
+import GitHubPage from "./pages/GitHubPage";
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [report, setReport] = useState(null);
-
-  const handleFileSelect = (file) => {
-    setError("");
-    setReport(null);
-    setSelectedFile(file);
-  };
-
-  const analyzeResume = async () => {
-    if (!selectedFile) {
-      setError("Please select a PDF or DOCX resume first.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    setReport(null);
-
-    try {
-      const formData = new FormData();
-      formData.append("resume", selectedFile);
-
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Analysis failed. Please try again.");
-      setReport(data);
-    } catch (err) {
-      setError(err.message || "Analysis failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <main className="app">
-      <section className="container">
-        <h1>Talent Resume Analyzer</h1>
-        <p className="subtitle">
-          Upload your resume to receive a structured technical profile and score.
-        </p>
-
-        <UploadZone
-          selectedFile={selectedFile}
-          onFileSelect={handleFileSelect}
-          onAnalyze={analyzeResume}
-          disabled={loading}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ResumePage />} />
+        <Route path="/github" element={<GitHubPage />} />
+        <Route
+          path="/challenge"
+          element={
+            <main className="app">
+              <section className="container">
+                <div className="card">
+                  <h2>Stage 3 Challenge Coming Next</h2>
+                  <p>Your enriched profile has been saved in pipeline memory.</p>
+                </div>
+              </section>
+            </main>
+          }
         />
-
-        {error ? <div className="error-banner">{error}</div> : null}
-
-        {loading ? <LoadingState /> : null}
-
-        {report ? (
-          <section className="report-layout">
-            <ScoreCard report={report} />
-            <AnalysisReport report={report} />
-          </section>
-        ) : null}
-      </section>
-    </main>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

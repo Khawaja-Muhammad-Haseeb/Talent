@@ -1,5 +1,6 @@
 import os
 import traceback
+from pathlib import Path
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -9,7 +10,8 @@ from py_services.extract_links import extract_links
 from py_services.fetch_links import fetch_links
 from py_services.groq_analyzer import groq_analyzer
 
-load_dotenv()
+GLOBAL_ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(dotenv_path=GLOBAL_ENV_PATH)
 
 app = FastAPI(title="Talent Resume Analyzer API")
 
