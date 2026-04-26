@@ -120,7 +120,7 @@ function GitHubPage() {
         <h1>Stage 2: GitHub and Portfolio Scanner</h1>
         <div className="card">
           <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-            {["Resume", "GitHub", "Challenge", "Interview", "Certificate"].map((step) => (
+            {["Resume", "GitHub", "Challenge", "Certificate"].map((step) => (
               <span
                 key={step}
                 className="skill-pill"

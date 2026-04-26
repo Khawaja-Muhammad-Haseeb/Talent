@@ -152,7 +152,7 @@ function ChallengePage() {
         <h1>Stage 3: Domain Challenge</h1>
         <div className="card">
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {["Resume ✓", "GitHub ✓", "Challenge", "Interview", "Certificate"].map((step) => (
+            {["Resume ✓", "GitHub ✓", "Challenge", "Certificate"].map((step) => (
               <span key={step} className="skill-pill">
                 {step}
               </span>
@@ -201,8 +201,8 @@ function ChallengePage() {
 
         {evaluation ? (
           <section className="card">
-            <button className="continue-btn" onClick={() => navigate("/interview")}>
-              Continue to Interview →
+            <button className="continue-btn" onClick={() => navigate("/certificate")}>
+              Continue to Certificate →
             </button>
           </section>
         ) : null}

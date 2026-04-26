@@ -53,14 +53,14 @@ function AnalysisReport({ report }) {
         </section>
       ) : null}
 
-      <button
+      {/* <button
         className="continue-btn"
         onClick={() => {
           console.log("nextStageContext", report.nextStageContext);
         }}
       >
         Continue to GitHub Analysis →
-      </button>
+      </button> */}
     </section>
   );
 }

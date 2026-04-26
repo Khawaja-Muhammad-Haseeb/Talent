@@ -2,6 +2,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ResumePage from "./pages/ResumePage";
 import GitHubPage from "./pages/GitHubPage";
 import ChallengePage from "./pages/ChallengePage";
+import CertificatePage from "./pages/CertificatePage";
+import VerifyPage from "./pages/VerifyPage";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
         <Route path="/" element={<ResumePage />} />
         <Route path="/github" element={<GitHubPage />} />
         <Route path="/challenge" element={<ChallengePage />} />
+        <Route path="/certificate" element={<CertificatePage />} />
+        <Route path="/verify/:credentialId" element={<VerifyPage />} />
         <Route
           path="/interview"
           element={
